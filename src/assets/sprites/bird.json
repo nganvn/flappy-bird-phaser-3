@@ -1,0 +1,104 @@
+{
+	"textures": [
+		{
+			"image": "bird.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 108,
+				"h": 26
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "redbird_0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 34,
+						"h": 24
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 34,
+						"h": 24
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 34,
+						"h": 24
+					}
+				},
+				{
+					"filename": "redbird_1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 34,
+						"h": 24
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 34,
+						"h": 24
+					},
+					"frame": {
+						"x": 37,
+						"y": 1,
+						"w": 34,
+						"h": 24
+					}
+				},
+				{
+					"filename": "redbird_3.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 34,
+						"h": 24
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 34,
+						"h": 24
+					},
+					"frame": {
+						"x": 37,
+						"y": 1,
+						"w": 34,
+						"h": 24
+					}
+				},
+				{
+					"filename": "redbird_2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 34,
+						"h": 24
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 34,
+						"h": 24
+					},
+					"frame": {
+						"x": 73,
+						"y": 1,
+						"w": 34,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:7546a9eddb03cc4621489039af65809d:22fd1e1b38da1782398a30292761816e:6a1677158d465170d66e062b762d8e2a$"
+	}
+}
