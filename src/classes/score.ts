@@ -5,14 +5,14 @@ export class Score extends GameObjects.Container {
 
   constructor(scene: Scene) {
     super(scene);
-    this.setSize(100, 100);
 
     this.scoreValue = 0;
-    this.setY(130);
+    this
+      .setY(80)
+      .setVisible(false)
+      .setDepth(15);
 
     this.printScore();
-
-    scene.children.addAt(this, 100);
   }
 
   public getScore(): number {
@@ -24,15 +24,17 @@ export class Score extends GameObjects.Container {
   }
 
   public printScore(): void {
-    this.getAll().forEach( (ele) => ele.destroy());
+    this.getAll().forEach((ele) => ele.destroy());
 
     let offset = 0;
     this.scoreValue.toString().split('').forEach((item) => {
-      let number = this.scene.add.image(offset, 0, item);
-      number.setOrigin(0, 0.5);
-      this.addAt(number, 100);
-      offset += number.width - 4;
+      let digit = this.scene.add.image(offset, 0, 'sprite', `digit/digit-36-${item}`);
+
+      digit.setOrigin(0, 0.5);
+      this.add(digit);
+      offset += digit.width - 4;
     });
+
     offset += 4;
     offset *= this.scale;
     this.setX(this.scene.cameras.main.width / 2 - offset / 2);
@@ -42,6 +44,5 @@ export class Score extends GameObjects.Container {
     this.scene.sound.play('point');
     this.scoreValue += 1;
     this.printScore();
-
   }
 }
