@@ -1,104 +1,87 @@
 import { Scene, Game } from 'phaser';
 import GameScene from './game-scene';
 import { Score } from '../classes/score';
-enum GameState {
-  AWAIT = 0,
-  PLAYING,
-  DIE,
-  ENDGAME
-}
+import { GameMenu } from '../classes/ui/game-menu';
+import { GameHelper } from '../classes/ui/game-helper';
+import { GameOverBoard } from '../classes/ui/game-over-board';
+import { Background } from '../classes/background';
+import { Ground } from '../classes/ground';
+import { Bird } from '../classes/bird';
 
 export default class UIScene extends Scene {
-  private helper!: Phaser.GameObjects.Image;
   private gameOver!: Phaser.GameObjects.Image;
   private highScore: number = 0;
-  private gameState: GameState;
-  private _highScore!: Score;
+  
+  private gameMenu!: GameMenu;
+  private gameOverBoard!: GameOverBoard;
 
-  private playGame = () => {
-    let gameScene = this.scene.get('game-scene') as GameScene;
-    this.helper.setVisible(false);
-    gameScene.playGame();
-  }
+  public playBlackAnimationIn!: (duration: number) => void;
+  public playBlackAnimationOut!: (duration: number) => void;
 
   constructor() {
     super('ui-scene');
-    this.gameState = GameState.AWAIT;
   }
 
-  public create(): void {   
-    
-    var rect = new Phaser.Geom.Rectangle(0, 0, this.cameras.main.width, this.cameras.main.height);
-
-    let pointer = this.input.activePointer;
-    this.helper = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 3 + 16, 'helper')
-      .setInteractive(rect, () => {
-        if (pointer.isDown) {
-          this.playGame();
-        }
-    });
-
-    this.gameOver = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 3 + 16, 'game-over')
-    .setInteractive(rect, () => {
-      if(pointer.isDown && this.gameState == GameState.ENDGAME) {
-        this.scene.get('game-scene').scene.restart();
-        this.helper.setVisible(true);
-        this.gameOver.setVisible(false);
-        this._highScore.setVisible(false);
-        this.gameState = GameState.AWAIT;
-      }
-    });
-    this._highScore = new Score(this);
-    this._highScore.setVisible(false);
-    this._highScore.setScale(1.5);
-    this._highScore.setY(260);
-
-    this.gameOver.setVisible(false);
+  public create(): void {
+    this.gameMenu = new GameMenu(this, 0, 0);
+    this.gameOverBoard = new GameOverBoard(this, 0, 0);
+    this.showGameMenu();
   }
 
-  public showEndGameBoard(score: number) {
-    this.gameOver.setAlpha(0);
-    this.gameOver.setVisible(true);
-    this.tweens.add({
-      targets: this.gameOver,
-      delay: 500,
-      duration: 600,
-      alpha: {from: 0, to: 1 },
-      onStart: () => {
-        this.sound.play('swoosh');
-      },
-      onComplete: () => {
-        this.gameOver.setAlpha(1);
-      } 
-    });
-    
-    this._highScore.setAlpha(0);
-    this._highScore.setVisible(true);
-    if (score > this.highScore) {
-      this.highScore = score;
-      this._highScore.setScore(this.highScore);
-      this._highScore.printScore();
-    }
-    this.tweens.add({
-      targets: this._highScore,
-      delay: 1100,
-      duration: 600,
-      alpha: {from: 0, to: 1 },
-      onStart: () => {
-        this.sound.play('swoosh');
-      },
-      onComplete: () => {
-        this._highScore.setAlpha(1);
-      } 
-    });
-    
-    var timer = this.time.addEvent({
-      delay: 2000,
+  public showGameOverBoard(score: number) {
+    this.gameOverBoard.show(score);
+    this.time.addEvent({
+      delay: 1200, 
       callback: () => {
-        this.gameState = GameState.ENDGAME;
+        this.showGameMenu();
       }
-     });
+    });
   }
 
+  public hideGameOverBoard() {
+    this.gameOverBoard.hide();
+  }
 
+  public showGameMenu(): void {
+    this.gameMenu.show();
+  }
+
+  private createBlackAnimation(): void {
+    const blank = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x000000, 0)
+      .setOrigin(0);
+
+    this.playBlackAnimationIn = (duration: number): void => {
+      this.tweens.add({
+        targets: blank,
+        duration: duration,
+        fillAlpha: {from: 1, to: 0},
+        onStart: () => {
+          blank.setVisible(true);
+          this.sound.play('swoosh');
+        },
+        onComplete: () => {
+          blank.setVisible(false);
+        }
+      });
+    };
+
+    
+    this.playBlackAnimationOut = (duration: number): void => {
+      this.tweens.add({
+        targets: blank,
+        duration: duration,
+        fillAlpha: {from: 0, to: 1},
+        onStart: () => {
+          blank.setVisible(true);
+          this.sound.play('swoosh');
+        },
+        onComplete: () => {
+          blank.setVisible(false);
+        }
+      });
+    };
+
+
+    this.children.addAt(blank, 101)
+  }
 }
